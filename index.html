@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>No More Petting</title>
+  <meta name="description" content="A simple tool to check if your Discord server is being tracked by Spy.pet scraper bots.">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      height: 100vh;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .header {
+      margin-bottom: 20px;
+      text-align: center;
+      animation: slideInHeader 0.5s ease;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+
+    .github-link {
+      text-align: center;
+      margin-bottom: 20px;
+      animation: slideInHeader 0.5s ease;
+    }
+
+    .github-link a {
+      color: #4CAF50;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .github-link a:hover {
+      color: #45a049;
+    }
+
+    .form {
+      width: 500px; /* Widened the form */
+      padding: 20px;
+      background-color: #1e1e1e;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      animation: slideInForm 0.5s ease;
+    }
+
+    p {
+      margin-bottom: 15px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      width: calc(100% - 20px); /* Widened the text box */
+      margin-bottom: 10px;
+      border: 1px solid #333333;
+      border-radius: 5px;
+      background-color: #333333;
+      color: #ffffff;
+    }
+
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      background-color: #4CAF50;
+      color: #ffffff;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 20px;
+      border-radius: 10px;
+      display: none;
+    }
+
+    .result-good {
+      background-color: #1b5a16;
+    }
+
+    .result-bad {
+      background-color: #5a1616;
+    }
+
+    .result i {
+      display: block;
+      margin-top: 10px;
+      font-size: 0.8rem;
+    }
+
+    .discord-button {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+      animation: fadeIn 0.5s ease;
+    }
+
+    .discord-button img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .discord-button img:hover {
+      transform: scale(1.1);
+    }
+
+    @keyframes slideInHeader {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInForm {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>No More Petting!</h1>
+  </div>
+  <div class="github-link">
+    <a href="https://github.com/ixvqxx/NoMorePetting" target="_blank">View on GitHub</a>
+  </div>
+  <div class="form">
+    <p>Checks if server contains a data scraper bot, <a href="https://www.youtube.com/watch?v=ktxbXlF6UQE" target="_blank" rel="noopener noreferrer">more info</a>.</p>
+    <input type="text" placeholder="Enter Discord Server ID" id="serverId">
+    <button id="check-btn">Check</button>
+    <div class="result result-good" id="good-result">
+      <p>Everything is OK, Spy.pet is not tracking this server!</p>
+      <i>This service is powered by kickthespy.pet.</i>
+    </div>
+    <div class="result result-bad" id="bad-result">
+      <p>Everything is NOT ok, Spy.pet is tracking this server, using bot under name <strong id="botName"></strong>.</p>
+      <details>
+        <summary>More info</summary>
+        <div style="display: flex; gap: 0.5em;">
+          <img src="" alt="bot's pfp" title="Bot's Avatar" id="botAvatar" width="64" height="64">
+          <div>
+            <p>Bot's Username: <code id="botUsername"></code></p>
+            <p>Bot's ID: <code id="botId"></code></p>
+            <button id="ban-btn">Ban Member Command</button>
+          </div>
+        </div>
+      </details>
+      <i>This service is powered by kickthespy.pet.</i>
+    </div>
+  </div>
+  <div class="discord-button">
+    <a href="https://discord.gg/iristf" target="_blank">
+      <img src="https://cdn.discordapp.com/emojis/941774804468498522.gif?size=96&quality=lossless" alt="Discord Icon">
+    </a>
+  </div>
+
+  <script>
+    const API_URL = "https://kickthespy.pet";
+
+    document.getElementById("check-btn").addEventListener("click", function (event) {
+      const serverId = document.getElementById("serverId").value;
+
+      fetch(`${API_URL}/getBot?id=${serverId}`)
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.id) {
+            document.getElementById("botName").innerText = data.global_name;
+            document.getElementById("botUsername").innerText = data.username;
+            document.getElementById("botId").innerText = data.id;
+            document.getElementById("botAvatar").setAttribute("src", data.avatarURL);
+
+            document.getElementById("good-result").style.display = "none";
+            document.getElementById("bad-result").style.display = "block";
+          } else {
+            document.getElementById("good-result").style.display = "block";
+            document.getElementById("bad-result").style.display = "none";
+          }
+        })
+        .catch((error) => console.error("Error:", error));
+    });
+
+    document.getElementById("ban-btn").addEventListener("click", function (event) {
+      const userId = document.getElementById("botId").innerText;
+      const command = `/ban <@${userId}>`;
+
+      navigator.clipboard.writeText(command)
+        .then(() => {
+          alert("Ban command copied to clipboard!");
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+          alert("Failed to copy ban command to clipboard.");
+        });
+    });
+  </script>
+</body>
+</html>
