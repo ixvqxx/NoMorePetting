@@ -128,6 +128,24 @@
       transform: scale(1.1);
     }
 
+    .owner-button {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+    }
+
+    .owner-button img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .owner-button img:hover {
+      transform: scale(1.1);
+    }
+
     @keyframes slideInHeader {
       from {
         opacity: 0;
@@ -161,6 +179,7 @@
   </style>
 </head>
 <body>
+
   <div class="header">
     <h1>No More Petting!</h1>
   </div>
@@ -194,6 +213,12 @@
   <div class="discord-button">
     <a href="https://discord.gg/iristf" target="_blank">
       <img src="https://cdn.discordapp.com/emojis/941774804468498522.gif?size=96&quality=lossless" alt="Discord Icon">
+    </a>
+  </div>
+
+  <div class="owner-button">
+    <a href="https://guns.lol/.ovhx" target="_blank">
+      <img src="https://cdn.discordapp.com/emojis/1206562614277050368.webp?size=96&quality=lossless" alt="Owner Icon">
     </a>
   </div>
 
