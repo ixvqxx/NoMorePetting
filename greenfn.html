@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta property="og:title" content="green fn">
+    <meta property="og:description" content="green fn">
+    <meta property="og:image" content="https://i.imgur.com/IlUxd1s.png">
+    <meta property="og:url" content="https://twvl.github.io/greenfn">
+    <title>green fn</title>
+    <link rel="icon" type="image/png" href="backgrounds/greenfn.png">
+    <style>
+        body {
+            position: relative;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-image: url("backgrounds/greenfn.png");
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .click-to-enter {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 1);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 50px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.5s ease;
+            opacity: 1;
+            z-index: 1;
+        }
+
+        .click-to-enter.hidden {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="click-to-enter" onclick="playAudio(); this.classList.add('hidden'); setTimeout(function() { document.body.removeChild(this); }.bind(this), 500);">Click to enter</div>
+    <audio id="audio" loop>
+        <source src="audios/greenfn.mp3" type="audio/mpeg">
+    </audio>
+
+    <script>
+        function playAudio() {
+            var myAudio = document.getElementById('audio');
+            myAudio.play();
+        }
+
+        function openFullscreen() {
+            var elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.webkitRequestFullscreen) { 
+                elem.webkitRequestFullscreen(); 
+            } else if (elem.msRequestFullscreen) { 
+              elem.msRequestFullscreen(); 
+            }
+        }
+
+        document.addEventListener('fullscreenchange', function() {
+            if (document.fullscreenElement) {
+                var myAudio = document.getElementById('myAudio');
+                myAudio.play();
+            }
+        });
+
+        window.onload = openFullscreen;
+    </script>
+<!-- Cloudflare Pages Analytics --><script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "6458c9b803ab45dab125dfcb172a3dee"}'></script><!-- Cloudflare Pages Analytics --></body>
+</html>
