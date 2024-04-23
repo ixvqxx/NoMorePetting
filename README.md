@@ -8,6 +8,10 @@ This is a tool to check if your discord server is being tracked by a bot from sp
 
 - [@.ovhx](https://guns.lol/.ovh)
 
+## Live Demo
+
+- [Click To View Live Demo!](https://ixvqx.xyz/)
+
 
 ## Contributing
 
