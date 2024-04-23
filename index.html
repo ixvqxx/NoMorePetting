@@ -102,6 +102,10 @@
       background-color: #5a1616;
     }
 
+    .result-error {
+      background-color: #5a1616; /* Red background color */
+    }
+
     .result i {
       display: block;
       margin-top: 10px;
@@ -209,6 +213,9 @@
       </details>
       <i>This service is powered by kickthespy.pet.</i>
     </div>
+    <div class="result result-error" id="error-result" style="display: none;">
+      <p>Invalid Discord Server ID format. Please enter a 18-digit server ID.</p>
+    </div>
   </div>
   <div class="discord-button">
     <a href="https://discord.gg/iristf" target="_blank">
@@ -217,7 +224,7 @@
   </div>
 
   <div class="owner-button">
-    <a href="https://guns.lol/.ovhx" target="_blank">
+    <a href="https://guns.lol/.ovh" target="_blank">
       <img src="https://cdn.discordapp.com/emojis/1206562614277050368.webp?size=96&quality=lossless" alt="Owner Icon">
     </a>
   </div>
@@ -227,6 +234,18 @@
 
     document.getElementById("check-btn").addEventListener("click", function (event) {
       const serverId = document.getElementById("serverId").value;
+
+      // Regular expression to check if the ID is in the correct format
+      const idRegex = /^\d{18}$/;
+
+      if (!idRegex.test(serverId)) {
+        document.getElementById("error-result").style.display = "block";
+        document.getElementById("good-result").style.display = "none";
+        document.getElementById("bad-result").style.display = "none";
+        return;
+      } else {
+        document.getElementById("error-result").style.display = "none";
+      }
 
       fetch(`${API_URL}/getBot?id=${serverId}`)
         .then((response) => response.json())
